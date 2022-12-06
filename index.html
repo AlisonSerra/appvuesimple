@@ -5,21 +5,65 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AppVueSimple - Kaamelot</title>
+  <style>
+    h1 {
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-
+    <h1>Kaamelot Citations</h1>
+    <ul>
+      <li>
+        {{Citation}}
+        {{auteur}}
+        {{acteur}} - {{personnage}}
+        {{saison}} - {{episode}}
+      </li>
+    </ul>
   </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/vue@3"></script>
   <script>
-    const apiURL= "https://kaamelott.chaudie.re/api";
+    const apiURL= 'https://kaamelott.chaudie.re/api';
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Access-Control-Allow-Origin': '<origin>'
+    }
+    }
 
-    Vue.createAPP({
-      data(){},
-      created(){},
+    Vue.createApp({
+      data(){
+        return {
+          citation: '',
+          infos: [
+            auteur= '',
+            acteur= '',
+            personnage= '',
+            saison= '',
+            episode= '',
+          ]
+        }
+      },
+      created(){
+        this.randomQuote();
+      },
       watch: {},
-      methods: {},
-    }).mount("app");
+      methods: {
+        async randomQuote () {
+          try {
+            const response = await axios.get(apiURL + "/random", config)
+            console.log(response.data)
+            this.citation = response.data.citation.citation;
+            this.infos = response.data.citation.infos;
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      },
+    }).mount("#app");
   </script>
 </body>
 </html>
