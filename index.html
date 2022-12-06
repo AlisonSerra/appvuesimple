@@ -14,14 +14,11 @@
 <body>
   <div id="app">
     <h1>Kaamelot Citations</h1>
-    <ul>
-      <li>
-        {{Citation}}
-        {{auteur}}
-        {{acteur}} - {{personnage}}
-        {{saison}} - {{episode}}
-      </li>
-    </ul>
+    <p>{{citation}} </p>
+    <p>{{infos.auteur}}</p>
+    <p>{{infos.acteur}} - {{infos.personnage}}</p>
+    <p>{{infos.saison}} - {{infos.episode}}</p>
+    
   </div>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/vue@3"></script>
