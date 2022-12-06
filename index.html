@@ -14,6 +14,10 @@
 <body>
   <div id="app">
     <h1>Kaamelot Citations</h1>
+
+    <input id="random" type="button" value="random" @click="randomQuote()" />
+    <input id="all" type="button" value="all" @click="allQuote()" />
+
     <p>{{citation}} </p>
     <p>{{infos.auteur}}</p>
     <p>{{infos.acteur}} - {{infos.personnage}}</p>
@@ -53,6 +57,19 @@
           try {
             const response = await axios.get(apiURL + "/random", config)
             console.log(response.data)
+            this.citation = response.data.citation.citation;
+            this.infos = response.data.citation.infos;
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        async allQuote () {
+          try {
+            const response = await axios.get(apiURL + "/random", config)
+            console.log(response.data)
+            for (const citations in response) {
+              
+            }
             this.citation = response.data.citation.citation;
             this.infos = response.data.citation.infos;
           } catch (error) {
