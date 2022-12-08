@@ -1,0 +1,19 @@
+.button {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 1%;
+}
+.btn {
+  background-color: rgb(216, 213, 213);
+  border-color: black;
+}
+.btn-all{
+  padding: 0 2.5%;
+}
+.citation{
+  margin: 2%;
+}
+.who{
+  display: flex;
+  justify-content: space-evenly;
+}
