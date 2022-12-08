@@ -8,15 +8,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <div class="container">
     <div id="app">
       <h1 class="text-center">Kaamelott Citations</h1>
-
+      <img src="img/kaamelott.jpg" >
       <div class="button">
         <button id="random" class="btn" type="button" @click="randomQuote()">Random</button>
-        <button id="all" class="btn btn-all" type="button" @click="allQuote()">  All  </button>
+        <button id="all" class="btn btn-all" type="button" @click="allCharacter()">Personnage</button>
       </div>
       <div class="citation">
         <p class="text-center">{{citation}} </p>
@@ -69,18 +70,21 @@
             console.log(error);
           }
         },
-        async allQuote () {
+        async allCharacter () {
+          const characters = ['Angharad','Anna','Appius Manilius','Arthur','Attila','Belt','Père Blaise','Bohort','Breccan','Le Roi Burgonde','Caius Camillus','Calogrenant','Capito','César','Cryda de Tintagel','Dagonet','La Dame du Lac','Demetra','Drusilla','Le Duc d\'Aquitaine','Edern','Elias de Kelliwic\'h','Galessin','Gauvain','Goustan','Grüdü','Guenièvre','Guethenoc','Hervé de Rinel','L\'interprète burgonde','Le Seigneur Jacca','Les Jumelles du pêcheur','Le Jurisconsulte','Kadoc','Karadoc','Lancelot','Léodagan','Loth','Le Maître d\'Armes','Méléagant','Manius Macrinus Firmus','Merlin','Mevanwi','Perceval','Roparzh','Lucius Sillius Sallustius','Séfriane d\'Aquitaine','Séli','Spurius Cordius Frontinius','Le Tavernier','Urgan','Vérinus','Venec','Ygerne','Yvain']
+          console.log(characters)
+          for (const character of characters) {
+          let response = [];
           try {
-            const response = await axios.get(apiURL + "/all", config)
-            console.log(response.data)
-            for (const citations in response) {
+              response = await axios.get(apiURL + `//personnage/${character}/pic`, config)
+              console.log(response.data)
               
             }
-            this.citation = response.data.citation.citation;
-            this.infos = response.data.citation.infos;
           } catch (error) {
             console.log(error);
           }
+          this.citation = response.data.citation.citation;
+          this.infos = response.data.citation.infos;
         },
       },
     }).mount("#app");
