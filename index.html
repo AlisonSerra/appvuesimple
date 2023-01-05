@@ -20,7 +20,7 @@
         <button id="all" class="btn btn-all" type="button" @click="allCharacter()">Personnage</button>
       </div>
 
-      <div class="citation" v-if="this.citations.isActive === true">
+      <div class="citation" v-if="this.citations.isActive == true">
         <p class="text-center">{{citations.citation}} </p>
         <div class="who">
           <p>Citations de {{infos.acteur}} dans le rôle de "{{infos.personnage}}". </p>
@@ -29,12 +29,12 @@
         <p class="text-center">Écris par <strong>{{infos.auteur}}</strong></p>
       </div>
 
-      <div class="personnage" v-if="this.personnages.isActive === true">
+      <div class="personnage" v-if="this.personnages.isActive == true">
         <div class="who">
           <ul id="example-1">
-            <li v-for="personnage of personnages" >
-              <img class="persoImage" src={{personnage.image}}">
-              <p>{{ personnage.nom }}</p>
+            <li v-for="perso of this.personnages.perso" >
+              <img class="persoImage" src={{perso.image}}>
+              <p>{{ perso }}</p>
             </li>
           </ul>
         </div>
@@ -50,8 +50,7 @@
       headers: {
         'Content-Type': 'application/json',
         // 'Access-Control-Allow-Origin': '<origin>'
-    }
-    }
+    }}
 
     Vue.createApp({
       data(){
@@ -67,11 +66,13 @@
             saison= '',
             episode= '',
           ],
-          personnages: [
-            isActive= false,
-            image= '',
-            nom= ''
-          ]
+          personnages: {
+            isActive: false,
+            perso: {
+              image: [],
+              nom: ['Angharad','Anna','Appius Manilius','Arthur','Attila','Belt','Père Blaise','Bohort','Breccan','Le Roi Burgonde','Caius Camillus','Calogrenant','Capito','César','Cryda de Tintagel','Dagonet','La Dame du Lac','Demetra','Drusilla','Le Duc d\'Aquitaine','Edern','Elias de Kelliwic\'h','Galessin','Gauvain','Goustan','Grüdü','Guenièvre','Guethenoc','Hervé de Rinel','L\'interprète burgonde','Le Seigneur Jacca','Les Jumelles du pêcheur','Le Jurisconsulte','Kadoc','Karadoc','Lancelot','Léodagan','Loth','Le Maître d\'Armes','Méléagant','Manius Macrinus Firmus','Merlin','Mevanwi','Perceval','Roparzh','Lucius Sillius Sallustius','Séfriane d\'Aquitaine','Séli','Spurius Cordius Frontinius','Le Tavernier','Urgan','Vérinus','Venec','Ygerne','Yvain']
+            }
+          }
         }
       },
       created(){
@@ -94,17 +95,12 @@
         async allCharacter () {
           this.citations.isActive = false;
           this.personnages.isActive = true;
-
-          this.personnages.nom = ['Angharad','Anna','Appius Manilius','Arthur','Attila','Belt','Père Blaise','Bohort','Breccan','Le Roi Burgonde','Caius Camillus','Calogrenant','Capito','César','Cryda de Tintagel','Dagonet','La Dame du Lac','Demetra','Drusilla','Le Duc d\'Aquitaine','Edern','Elias de Kelliwic\'h','Galessin','Gauvain','Goustan','Grüdü','Guenièvre','Guethenoc','Hervé de Rinel','L\'interprète burgonde','Le Seigneur Jacca','Les Jumelles du pêcheur','Le Jurisconsulte','Kadoc','Karadoc','Lancelot','Léodagan','Loth','Le Maître d\'Armes','Méléagant','Manius Macrinus Firmus','Merlin','Mevanwi','Perceval','Roparzh','Lucius Sillius Sallustius','Séfriane d\'Aquitaine','Séli','Spurius Cordius Frontinius','Le Tavernier','Urgan','Vérinus','Venec','Ygerne','Yvain']
-          console.log(this.personnages);
-          for(people in this.personnages.nom) {
-            try {
-              const response = await axios.get(apiURL + `/personnage/${people}/pic`, config)
-              this.personnages.image = response;
-            } catch (error) {
-              console.log(response.data);
-              console.log(error)
-            }
+          
+          for(nom of this.personnages.perso.nom) {
+            const response = `${apiURL}/personnage/${nom}/pic`;
+            // console.log("response = ", response);
+            this.personnages.perso.image.push(response);
+            // console.log("personnages = ", this.personnages);
           }
         },
       },
