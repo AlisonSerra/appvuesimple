@@ -12,21 +12,32 @@
 </head>
 <body>
   <div class="container">
-    <div id="app">
+    <div id="app" v-cloak>
       <h1 class="text-center">Kaamelott Citations</h1>
       <img src="img/kaamelott.jpg" >
       <div class="button">
         <button id="random" class="btn" type="button" @click="randomQuote()">Random</button>
         <button id="all" class="btn btn-all" type="button" @click="allCharacter()">Personnage</button>
       </div>
-      <div class="citation">
-        <p class="text-center">{{citation}} </p>
+
+      <div class="citation" v-if="this.citations.isActive === true">
+        <p class="text-center">{{citations.citation}} </p>
         <div class="who">
           <p>Citations de {{infos.acteur}} dans le rôle de "{{infos.personnage}}". </p>
           <p>{{infos.saison}} - {{infos.episode}}</p> 
         </div>
-        
         <p class="text-center">Écris par <strong>{{infos.auteur}}</strong></p>
+      </div>
+
+      <div class="personnage" v-if="this.personnages.isActive === true">
+        <div class="who">
+          <ul id="example-1">
+            <li v-for="personnage of personnages" >
+              <img class="persoImage" src={{personnage.image}}">
+              <p>{{ personnage.nom }}</p>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -45,13 +56,21 @@
     Vue.createApp({
       data(){
         return {
-          citation: '',
+          citations: {
+            isActive: true,
+            citation: '',
+          },
           infos: [
             auteur= '',
             acteur= '',
             personnage= '',
             saison= '',
             episode= '',
+          ],
+          personnages: [
+            isActive= false,
+            image= '',
+            nom= ''
           ]
         }
       },
@@ -61,30 +80,32 @@
       watch: {},
       methods: {
         async randomQuote () {
+          this.citations.isActive = true;
+          this.personnages.isActive = false;
           try {
             const response = await axios.get(apiURL + "/random", config)
-            console.log(response.data)
-            this.citation = response.data.citation.citation;
+            this.citations.citation = response.data.citation.citation;
             this.infos = response.data.citation.infos;
           } catch (error) {
+            console.log(response.data);
             console.log(error);
           }
         },
         async allCharacter () {
-          const characters = ['Angharad','Anna','Appius Manilius','Arthur','Attila','Belt','Père Blaise','Bohort','Breccan','Le Roi Burgonde','Caius Camillus','Calogrenant','Capito','César','Cryda de Tintagel','Dagonet','La Dame du Lac','Demetra','Drusilla','Le Duc d\'Aquitaine','Edern','Elias de Kelliwic\'h','Galessin','Gauvain','Goustan','Grüdü','Guenièvre','Guethenoc','Hervé de Rinel','L\'interprète burgonde','Le Seigneur Jacca','Les Jumelles du pêcheur','Le Jurisconsulte','Kadoc','Karadoc','Lancelot','Léodagan','Loth','Le Maître d\'Armes','Méléagant','Manius Macrinus Firmus','Merlin','Mevanwi','Perceval','Roparzh','Lucius Sillius Sallustius','Séfriane d\'Aquitaine','Séli','Spurius Cordius Frontinius','Le Tavernier','Urgan','Vérinus','Venec','Ygerne','Yvain']
-          console.log(characters)
-          for (const character of characters) {
-          let response = [];
-          try {
-              response = await axios.get(apiURL + `//personnage/${character}/pic`, config)
-              console.log(response.data)
-              
+          this.citations.isActive = false;
+          this.personnages.isActive = true;
+
+          this.personnages.nom = ['Angharad','Anna','Appius Manilius','Arthur','Attila','Belt','Père Blaise','Bohort','Breccan','Le Roi Burgonde','Caius Camillus','Calogrenant','Capito','César','Cryda de Tintagel','Dagonet','La Dame du Lac','Demetra','Drusilla','Le Duc d\'Aquitaine','Edern','Elias de Kelliwic\'h','Galessin','Gauvain','Goustan','Grüdü','Guenièvre','Guethenoc','Hervé de Rinel','L\'interprète burgonde','Le Seigneur Jacca','Les Jumelles du pêcheur','Le Jurisconsulte','Kadoc','Karadoc','Lancelot','Léodagan','Loth','Le Maître d\'Armes','Méléagant','Manius Macrinus Firmus','Merlin','Mevanwi','Perceval','Roparzh','Lucius Sillius Sallustius','Séfriane d\'Aquitaine','Séli','Spurius Cordius Frontinius','Le Tavernier','Urgan','Vérinus','Venec','Ygerne','Yvain']
+          console.log(this.personnages);
+          for(people in this.personnages.nom) {
+            try {
+              const response = await axios.get(apiURL + `/personnage/${people}/pic`, config)
+              this.personnages.image = response;
+            } catch (error) {
+              console.log(response.data);
+              console.log(error)
             }
-          } catch (error) {
-            console.log(error);
           }
-          this.citation = response.data.citation.citation;
-          this.infos = response.data.citation.infos;
         },
       },
     }).mount("#app");

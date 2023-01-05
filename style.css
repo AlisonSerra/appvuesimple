@@ -14,15 +14,16 @@ img {
   background-color: rgb(216, 213, 213);
   border-color: black;
 }
-/*
-.btn-all{
-  padding: 0 2.5%;
-}
-*/
 .citation{
   margin: 2%;
 }
 .who{
   display: flex;
   justify-content: space-evenly;
+}
+.persoImage{
+  display: block;
+  margin: auto;
+  background-color: hsl(0, 0%, 90%);
+  transition: background-color 300ms;
 }
